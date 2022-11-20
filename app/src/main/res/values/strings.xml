@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Yelp</string>
+    <string name="title_search">Business Search</string>
+    <string name="keyword_search">KeyWord <font color="#FF0000">*</font></string>
+    <string name="distance_search">Distance</string>
+    <string name="category_search">Category <font color="#FF0000">*</font></string>
+    <string name="location_search">Location <font color="#FF0000">*</font></string>
+    <string name="auto_detect_search">Auto-detect my location</string>
+    <string name="submit_search">SUBMIT</string>
+    <string name="clear_search">CLEAR</string>
+    <string-array name="category_array_search">
+        <item>Default</item>
+        <item>Arts and Entertainment</item>
+        <item>Health and Medical</item>
+        <item>Hotel and Travel</item>
+        <item>Food</item>
+        <item>Professional Services</item>
+    </string-array>
 </resources>

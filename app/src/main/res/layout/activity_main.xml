@@ -6,13 +6,104 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/titleSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_search"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <AutoCompleteTextView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleSearch"
+            android:layout_marginTop="16dp"
+            android:id="@+id/keywordSearch"
+            android:minHeight="48dp"
+            android:hint="@string/keyword_search"/>
+
+
+        <EditText
+            android:id="@+id/distanceSearch"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/keywordSearch"
+            android:layout_marginTop="16dp"
+            android:hint="@string/distance_search"
+            android:minHeight="48dp" />
+
+        <TextView
+            android:id="@+id/categoryLabelSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/distanceSearch"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/category_search"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/categoryLabelSearch"
+            android:minHeight="48dp"
+            android:id="@+id/categorySearch" />
+
+        <EditText
+            android:id="@+id/locationSearch"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/categorySearch"
+            android:layout_marginTop="16dp"
+            android:hint="@string/location_search"
+            android:minHeight="48dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_detect_search"
+            android:layout_below="@+id/locationSearch"
+            android:id="@+id/autoDetectSearch"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/autoDetectSearch"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit_search"
+                android:layout_marginEnd="32dp"
+                android:id="@+id/submitSearch"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="@string/clear_search"
+                android:id="@+id/clearSearch"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
