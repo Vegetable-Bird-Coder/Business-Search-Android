@@ -1,6 +1,8 @@
 package com.example.businesssearch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String[] autoLocation;
     private ArrayList<BusinessInfo> businessesInfo;
+    private RecyclerView businessesRecyclerView;
+    private BusinessesRecViewAdapter businessesRecViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //            @Override
 //            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
 //                String keyword = keywordSearch.getText().toString();
 //                if (keyword.length() >= 1) {
 //                    String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/autocomplete?text=";
@@ -66,15 +75,9 @@ public class MainActivity extends AppCompatActivity {
 //                    autoComplete(url);
 //                }
 //            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//
-//            }
 //        });
-//        keywordSearch.setThreshold(1);
-//        keywordSearch.setAdapter(new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, suggestions));
+
+
 
         autoDetectSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,12 +92,16 @@ public class MainActivity extends AppCompatActivity {
         categorySearch.setAdapter(categoryAdapter);
 
 
+
+
         submitSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 handleSubmit();
             }
         });
+
+
         
         clearSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +112,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleClear() {
-
+        businessesRecyclerView.setVisibility(View.GONE);
+        businessesInfo = new ArrayList<>();
+        keywordSearch.setText("");
+        distanceSearch.setText("");
+        categorySearch.setSelection(0);
+        locationSearch.setText("");
+        if (autoDetectSearch.isChecked()) {
+            autoDetectSearch.setChecked(false);
+            locationSearch.setVisibility(View.VISIBLE);
+        }
     }
 
     private String buildBusinessesSearchUrl() {
@@ -119,9 +135,6 @@ public class MainActivity extends AppCompatActivity {
         String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/businesses/search?";
         url += "term=" + keyword;
         switch (category) {
-            case "Default":
-                category = "all";
-                break;
             case "Arts and Entertainment":
                 category = "arts";
                 break;
@@ -170,10 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleSubmit() {
         if (checkAllField()) {
-            API.businessSearch(requestQueue, buildBusinessesSearchUrl(), businessesInfo);
-            for (BusinessInfo businessInfo : businessesInfo) {
-                Log.d("BusinessInfo", businessInfo.toString());
-            }
+            businessSearch(buildBusinessesSearchUrl());
         }
     }
 
@@ -201,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        for (String suggestion : suggestions) {
+                            System.out.println(suggestion);
+                        }
+                        keywordSearch.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, suggestions));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -213,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        keywordSearch = (AutoCompleteTextView) findViewById(R.id.keywordSearch);
+        keywordSearch = findViewById(R.id.keywordSearch);
         distanceSearch = findViewById(R.id.distanceSearch);
         locationSearch = findViewById(R.id.locationSearch);
         categorySearch = findViewById(R.id.categorySearch);
@@ -223,5 +237,44 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(MainActivity.this);
         autoLocation = new String[2];
         businessesInfo = new ArrayList<>();
+        businessesRecyclerView = findViewById(R.id.businessesInfoResult);
+    }
+
+    public void businessSearch(String url) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("businesses");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String id = jsonObject.getString("id");
+                                String name = jsonObject.getString("name");
+                                String imageUrl = jsonObject.getString("image_url");
+                                double rating = jsonObject.getDouble("rating");
+                                int distance = (int) Math.round(jsonObject.getDouble("distance") / 1609.34);
+                                BusinessInfo businessInfo = new BusinessInfo(id, name, imageUrl, rating, distance);
+//                                Log.d("BusinessInfo", businessInfo.toString());
+                                businessesInfo.add(businessInfo);
+                            }
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        businessesRecViewAdapter = new BusinessesRecViewAdapter(MainActivity.this, requestQueue);
+                        businessesRecyclerView.setAdapter(businessesRecViewAdapter);
+                        businessesRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                        businessesRecViewAdapter.setBusinessesInfo(businessesInfo);
+                        businessesRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
     }
 }

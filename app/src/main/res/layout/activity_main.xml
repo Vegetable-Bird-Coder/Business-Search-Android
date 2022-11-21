@@ -7,19 +7,16 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/businessSearchRelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <AutoCompleteTextView
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp" />
 
         <TextView
             android:id="@+id/titleSearch"
@@ -31,13 +28,13 @@
             android:textStyle="bold" />
 
         <AutoCompleteTextView
+            android:id="@+id/keywordSearch"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/titleSearch"
             android:layout_marginTop="16dp"
-            android:id="@+id/keywordSearch"
-            android:minHeight="48dp"
-            android:hint="@string/keyword_search"/>
+            android:hint="@string/keyword_search"
+            android:minHeight="48dp" />
 
 
         <EditText
@@ -60,11 +57,11 @@
             android:textSize="17sp" />
 
         <Spinner
+            android:id="@+id/categorySearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/categoryLabelSearch"
-            android:minHeight="48dp"
-            android:id="@+id/categorySearch" />
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/locationSearch"
@@ -76,34 +73,65 @@
             android:minHeight="48dp" />
 
         <CheckBox
+            android:id="@+id/autoDetectSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/auto_detect_search"
             android:layout_below="@+id/locationSearch"
-            android:id="@+id/autoDetectSearch"/>
+            android:text="@string/auto_detect_search" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/autoDetectSearch"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <Button
+                android:id="@+id/submitSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/submit_search"
                 android:layout_marginEnd="32dp"
-                android:id="@+id/submitSearch"/>
+                android:text="@string/submit_search" />
+
             <Button
+                android:id="@+id/clearSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:text="@string/clear_search"
-                android:id="@+id/clearSearch"/>
+                android:text="@string/clear_search" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Results"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/businessSearchRelLayout"
+        android:textColor="@color/black"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/businessesInfoResult"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

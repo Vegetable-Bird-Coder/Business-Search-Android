@@ -7,6 +7,8 @@ public class BusinessInfo {
     private double rating;
     private int distance;
 
+
+
     public BusinessInfo(String id, String name, String imageUrl, double rating, int distance) {
         this.id = id;
         this.name = name;
