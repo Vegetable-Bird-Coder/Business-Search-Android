@@ -1,8 +1,6 @@
 package com.example.businesssearch;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
@@ -15,11 +13,9 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.maps.MapView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.ArrayList;
+import com.smarteist.autoimageslider.SliderView;
 
 public class DetailInfoActivity extends AppCompatActivity {
     public static String id, name, location, price, phone, category, yelpUrl;
@@ -31,6 +27,8 @@ public class DetailInfoActivity extends AppCompatActivity {
 
     private ImageView backIcon, facebookIcon, twitterIcon;
     private TextView nameBar;
+
+
 
 
     @Override
@@ -88,6 +86,8 @@ public class DetailInfoActivity extends AppCompatActivity {
         });
 
 
+
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.pager);
 
@@ -103,6 +103,8 @@ public class DetailInfoActivity extends AppCompatActivity {
                 tab.setText("REVIEWS");
             }
         }).attach();
+
+
 
 
 

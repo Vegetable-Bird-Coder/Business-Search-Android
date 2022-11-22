@@ -11,11 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.smarteist.autoimageslider.SliderView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class DetailIntroduction extends Fragment {
 
     public static final String TITLE = "BUSINESS DETAILS";
     private TextView addressIntro, priceIntro, phoneIntro, statusIntro, categoryIntro, yelpIntro;
+    private SliderView sliderView;
+    private SliderAdapter sliderAdapter;
 
 
     public DetailIntroduction() {
@@ -51,5 +58,17 @@ public class DetailIntroduction extends Fragment {
         }
         categoryIntro.setText(DetailInfoActivity.category);
 //        yelpIntro.setText(DetailInfoActivity.yelpUrl);
+
+        ArrayList<String> photoSource = new ArrayList<>();
+        photoSource.addAll(Arrays.asList(DetailInfoActivity.photos));
+
+        sliderView = view.findViewById(R.id.detailPhotosSlider);
+        sliderAdapter = new SliderAdapter(DetailInfoActivity.context);
+        sliderView.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
+        sliderView.setSliderAdapter(sliderAdapter);
+        sliderAdapter.setPhotos(photoSource);
+        sliderView.setScrollTimeInSec(3);
+        sliderView.setAutoCycle(true);
+        sliderView.startAutoCycle();
     }
 }

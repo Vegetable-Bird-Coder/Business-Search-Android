@@ -96,6 +96,7 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                         boolean status;
                         String[] coordinates = new String[2];
                         String[] photos = null;
+                        String[] realPhotos = null;
                         id = "N/A";
                         name = "N/A";
                         location = "N/A";
@@ -129,7 +130,22 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                             JSONObject coordinatesObject = response.getJSONObject("coordinates");
                             coordinates[0] = coordinatesObject.getString("latitude");
                             coordinates[1] = coordinatesObject.getString("longitude");
-                            photos = response.getString("photos").split(",");
+
+                            String photosStr = response.getString("photos");
+                            photos = photosStr.substring(1, photosStr.length() - 1).split(",");
+                            realPhotos = new String[photos.length];
+                            int idx = 0;
+                            for (String photo : photos) {
+                                StringBuilder stringBuilder = new StringBuilder();
+                                for (char ch : photo.toCharArray()) {
+                                    if (ch != '\\') {
+                                        stringBuilder.append(ch);
+                                    }
+                                }
+                                String res = stringBuilder.toString();
+                                realPhotos[idx++] = res.substring(1, res.length() - 1);
+                            }
+
                         }
                         catch (JSONException e) {
                             e.printStackTrace();
@@ -144,7 +160,7 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                         intent.putExtra("url", yelpUrl);
                         intent.putExtra("status", status);
                         intent.putExtra("coordinate", coordinates);
-                        intent.putExtra("photos", photos);
+                        intent.putExtra("photos", realPhotos);
                         context.startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
