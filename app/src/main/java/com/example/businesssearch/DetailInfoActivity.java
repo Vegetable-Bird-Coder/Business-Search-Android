@@ -7,7 +7,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -24,6 +28,9 @@ public class DetailInfoActivity extends AppCompatActivity {
     public static String[] photos = null;
     public static RequestQueue requestQueue;
     public static Context context;
+
+    private ImageView backIcon, facebookIcon, twitterIcon;
+    private TextView nameBar;
 
 
     @Override
@@ -48,6 +55,38 @@ public class DetailInfoActivity extends AppCompatActivity {
         requestQueue =Volley.newRequestQueue(this);
         context = DetailInfoActivity.context;
 
+        backIcon = findViewById(R.id.backIcon);
+        facebookIcon = findViewById(R.id.facebookIcon);
+        twitterIcon = findViewById(R.id.twitterIcon);
+        nameBar = findViewById(R.id.nameDetailBar);
+
+        nameBar.setText(name);
+
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailInfoActivity.this.finish();
+            }
+        });
+
+        facebookIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openURL = new Intent(Intent.ACTION_VIEW);
+                openURL.setData(Uri.parse("https://www.facebook.com/sharer/sharer.php?u=" + yelpUrl));
+                startActivity(openURL);
+            }
+        });
+
+        twitterIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent openURL = new Intent(Intent.ACTION_VIEW);
+                openURL.setData(Uri.parse("https://twitter.com/intent/tweet?text=" + "Check " + name + " on Yelp.&url=" + yelpUrl));
+                startActivity(openURL);
+            }
+        });
+
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.pager);
@@ -64,6 +103,7 @@ public class DetailInfoActivity extends AppCompatActivity {
                 tab.setText("REVIEWS");
             }
         }).attach();
+
 
 
     }

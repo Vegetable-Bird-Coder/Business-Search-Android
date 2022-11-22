@@ -15,6 +15,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox autoDetectSearch;
     private Button submitSearch, clearSearch;
     private RequestQueue requestQueue;
+    private ImageView calendarIcon;
     private String[] suggestions = new String[]{"123", "234", "asdf"};
 
     private String[] autoLocation;
@@ -107,6 +109,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 handleClear();
+            }
+        });
+
+        calendarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Click Me", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -238,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
         autoLocation = new String[2];
         businessesInfo = new ArrayList<>();
         businessesRecyclerView = findViewById(R.id.businessesInfoResult);
+        calendarIcon = findViewById(R.id.calendarIcon);
     }
 
     public void businessSearch(String url) {
