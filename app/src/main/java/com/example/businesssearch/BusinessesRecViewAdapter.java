@@ -109,11 +109,17 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                             name = response.getString("name");
                             JSONObject locationObject = response.getJSONObject("location");
                             String locationString = locationObject.getString("display_address");
-                            location = String.join(",", locationString.substring(1, locationString.length() - 1).split(","));
+                            String prefix = "";
+                            location = "";
+                            for (String s : locationString.substring(1, locationString.length() - 1).split(",")) {
+                                location += prefix + s.substring(1, s.length() - 1);
+                                prefix = ", ";
+                            }
                             price = response.getString("price");
                             phone = response.getString("display_phone");
                             JSONArray categoryArray = response.getJSONArray("categories");
-                            String prefix = "";
+                            prefix = "";
+                            category = "";
                             for (int i = 0; i < categoryArray.length(); i++) {
                                 category += (prefix + categoryArray.getJSONObject(i).getString("title"));
                                 prefix = ", ";
