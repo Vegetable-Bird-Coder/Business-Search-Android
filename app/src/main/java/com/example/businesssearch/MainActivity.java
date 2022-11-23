@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +33,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView businessesRecyclerView;
     private BusinessesRecViewAdapter businessesRecViewAdapter;
 
+    private TextView noResult;
+
 
 
     @Override
@@ -61,28 +65,30 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-//        keywordSearch.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                String keyword = keywordSearch.getText().toString();
-//                if (keyword.length() >= 1) {
-//                    String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/autocomplete?text=";
-//                    url += keyword;
-//                    Log.d("MyURL", url);
-//                    autoComplete(url);
-//                }
-//            }
-//        });
+        keywordSearch.setThreshold(1);
+        keywordSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String keyword = keywordSearch.getText().toString();
+                if (keyword.length() >= 1) {
+                    String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/autocomplete?text=";
+                    url += keyword;
+                    Log.d("MyURL", url);
+                    autoComplete(url);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+            }
+        });
 
 
 
@@ -123,10 +129,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Click Me", Toast.LENGTH_SHORT).show();
             }
         });
+
+        calendarIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, BookingsActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
 
     private void handleClear() {
         businessesRecyclerView.setVisibility(View.GONE);
+        noResult.setVisibility(View.GONE);
         businessesInfo = new ArrayList<>();
         keywordSearch.setText("");
         distanceSearch.setText("");
@@ -221,12 +236,13 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             String data = response.get("autocomplete").toString();
                             data = data.substring(1, data.length() - 1);
-                            suggestions = data.split(",");
+                            String[] aux = data.split(",");
+                            suggestions = new String[aux.length];
+                            for (int i = 0; i < aux.length; i++) {
+                                suggestions[i] = aux[i].substring(1, aux[i].length() - 1);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-                        for (String suggestion : suggestions) {
-                            System.out.println(suggestion);
                         }
                         keywordSearch.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, suggestions));
                     }
@@ -253,9 +269,8 @@ public class MainActivity extends AppCompatActivity {
         businessesInfo = new ArrayList<>();
         businessesRecyclerView = findViewById(R.id.businessesInfoResult);
         calendarIcon = findViewById(R.id.calendarIcon);
-
-
-
+        Bookings.getInstance(this);
+        noResult = findViewById(R.id.noResultsSearch);
     }
 
     public void businessSearch(String url) {
@@ -280,11 +295,19 @@ public class MainActivity extends AppCompatActivity {
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         businessesRecViewAdapter = new BusinessesRecViewAdapter(MainActivity.this, requestQueue);
                         businessesRecyclerView.setAdapter(businessesRecViewAdapter);
                         businessesRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                         businessesRecViewAdapter.setBusinessesInfo(businessesInfo);
-                        businessesRecyclerView.setVisibility(View.VISIBLE);
+
+                        if (businessesInfo.size() == 0) {
+                            businessesRecyclerView.setVisibility(View.INVISIBLE);
+                            noResult.setVisibility(View.VISIBLE);
+                        } else {
+                            businessesRecyclerView.setVisibility(View.VISIBLE);
+                            noResult.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override

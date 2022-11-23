@@ -58,7 +58,8 @@ public class DetailMap extends Fragment{
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-
+                System.out.println(DetailInfoActivity.coordinates[0]);
+                System.out.println(DetailInfoActivity.coordinates[1]);
                 // For dropping a marker at a point on the Map
                 LatLng sydney = new LatLng(Double.parseDouble(DetailInfoActivity.coordinates[0]), Double.parseDouble(DetailInfoActivity.coordinates[1]));
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));

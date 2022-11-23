@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.smarteist.autoimageslider.SliderView;
 
@@ -27,6 +28,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 
 public class DetailIntroduction extends Fragment {
@@ -157,14 +159,12 @@ public class DetailIntroduction extends Fragment {
         dateBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("MYDATE", "Clicked");
                 final Calendar c = Calendar.getInstance();
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                         new DatePickerDialog.OnDateSetListener() {
-
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
@@ -173,35 +173,28 @@ public class DetailIntroduction extends Fragment {
 
                             }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
+
         });
 
         timeBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // on below line we are getting the
-                // instance of our calendar.
                 final Calendar c = Calendar.getInstance();
-
-                // on below line we are getting our hour, minute.
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
 
-                // on below line we are initializing our Time Picker Dialog
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-                                // on below line we are setting selected time
-                                // in our text view.
                                 String time = hourOfDay + ":" + minute;
                                 timeDialog.setText(time);
                             }
                         }, hour, minute, false);
-                // at last we are calling show to
-                // display our time picker dialog.
                 timePickerDialog.show();
             }
         });
@@ -209,6 +202,9 @@ public class DetailIntroduction extends Fragment {
         cancelDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                emailDialog.setText("");
+                dateDialog.setText("");
+                timeDialog.setText("");
                 dialog.dismiss();
             }
         });
@@ -216,6 +212,33 @@ public class DetailIntroduction extends Fragment {
         submitDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String regexPattern = "^(.+)@(\\S+)$";
+                String email = emailDialog.getText().toString();
+                String date = dateDialog.getText().toString();
+                String time = timeDialog.getText().toString();
+                int hour = 0;
+                int minutes = 0;
+                if (time.length() > 0) {
+                    hour = Integer.parseInt(time.split(":")[0]);
+                    minutes = Integer.parseInt(time.split(":")[1]);
+                }
+                if (email.length() == 0 || !Pattern.compile(regexPattern).matcher(email).matches()) {
+                    Toast.makeText(getContext(), "Invalid Email Address", Toast.LENGTH_SHORT).show();
+                } else if (date.length() == 0) {
+                    Toast.makeText(getContext(), "Invalid Appointment Date", Toast.LENGTH_SHORT).show();
+                } else if (time.length() == 0 || hour < 10 || hour > 17 || (hour == 17 && minutes > 0)) {
+                    Toast.makeText(getContext(), "Time should be between 10Am and 5PM", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Reservation Booked", Toast.LENGTH_SHORT).show();
+                    BookingInfo bookingInfo = new BookingInfo(DetailInfoActivity.id, DetailInfoActivity.name, date, time, email);
+                    Bookings.getInstance(getContext()).addBooking(bookingInfo);
+                    for (BookingInfo b : Bookings.getInstance(getContext()).getAllBookings()) {
+                        System.out.println(b);
+                    }
+                }
+                emailDialog.setText("");
+                dateDialog.setText("");
+                timeDialog.setText("");
                 dialog.dismiss();
             }
         });

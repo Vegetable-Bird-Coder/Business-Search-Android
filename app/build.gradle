@@ -27,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 
@@ -46,4 +49,5 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:2.3.0'
     implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
+    implementation 'com.github.xabaras:RecyclerViewSwipeDecorator:1.4'
 }
