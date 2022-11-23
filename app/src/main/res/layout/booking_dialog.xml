@@ -13,6 +13,7 @@
         android:textColor="@color/red_500"
         android:textStyle="bold"
         android:textSize="20sp"
+
         />
 
     <TextView
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="mm-dd-yyyy"
+            android:focusable="false"
             android:minHeight="48dp"
             android:layout_below="@+id/dateLabelDialog"/>
     </RelativeLayout>
@@ -66,7 +68,6 @@
             android:layout_height="wrap_content"
             android:text="Start Time"
             android:id="@+id/timeLabelDialog"
-
             android:textSize="16sp"
             android:textColor="@color/red_500"
             android:textStyle="bold"/>
@@ -77,6 +78,7 @@
             android:layout_height="wrap_content"
             android:hint="hh:mm"
             android:minHeight="48dp"
+            android:focusable="false"
             android:layout_below="@+id/timeLabelDialog"/>
     </RelativeLayout>
 

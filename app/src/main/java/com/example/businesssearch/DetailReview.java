@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +33,7 @@ public class DetailReview extends Fragment {
     private ArrayList<Review> reviews;
     private RecyclerView reviewsRecyclerView;
     private ReviewsRecViewAdapter reviewsRecViewAdapter;
+    private ProgressBar progressBar;
 
     public DetailReview() {
         // Required empty public constructor
@@ -48,6 +50,8 @@ public class DetailReview extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reviewsRecyclerView = view.findViewById(R.id.reviewsRecView);
+        progressBar = view.findViewById(R.id.progressBarReview);
+        progressBar.setVisibility(View.VISIBLE);
         reviews = new ArrayList<>();
         String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/businesses/" + DetailInfoActivity.id + "/reviews";
         loadReviews(url);
@@ -78,6 +82,7 @@ public class DetailReview extends Fragment {
                         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(DetailInfoActivity.context));
                         reviewsRecViewAdapter.setReviews(reviews);
                         reviewsRecyclerView.addItemDecoration(new DividerItemDecoration(reviewsRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+                        progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override

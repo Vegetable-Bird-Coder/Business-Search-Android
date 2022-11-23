@@ -7,10 +7,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.smarteist.autoimageslider.SliderView;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -70,10 +69,15 @@ public class DetailIntroduction extends Fragment {
         phoneIntro = view.findViewById(R.id.phoneIntro);
         statusIntro = view.findViewById(R.id.statusIntro);
         categoryIntro = view.findViewById(R.id.categoryIntro);
-        yelpIntro = view.findViewById(R.id.yelpIntro);
         addressIntro.setText(DetailInfoActivity.location);
         priceIntro.setText(DetailInfoActivity.price);
         phoneIntro.setText(DetailInfoActivity.phone);
+        yelpIntro = view.findViewById(R.id.yelpIntro);
+        String dynamicUrl = DetailInfoActivity.yelpUrl;
+        String linkedText = String.format("<a href=\"%s\">Business Link</a> ", dynamicUrl);
+        yelpIntro.setText(Html.fromHtml(linkedText));
+        yelpIntro.setMovementMethod(LinkMovementMethod.getInstance());
+
         if (DetailInfoActivity.status) {
             statusIntro.setTextColor(getResources().getColor(R.color.green_500));
             statusIntro.setText("Open Now");
@@ -116,47 +120,10 @@ public class DetailIntroduction extends Fragment {
 
         nameDialog.setText(DetailInfoActivity.name);
 
-        dateBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // on below line we are getting
-                // the instance of our calendar.
-                final Calendar c = Calendar.getInstance();
-
-                // on below line we are getting
-                // our day, month and year.
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
-
-                // on below line we are creating a variable for date picker dialog.
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        // on below line we are passing context.
-                        getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                // on below line we are setting date to our text view.
-                                String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                                dateDialog.setText(date);
-
-                            }
-                        },
-                        // on below line we are passing year,
-                        // month and day for selected date in our date picker.
-                        year, month, day);
-                // at last we are calling show to
-                // display our date picker dialog.
-                datePickerDialog.show();
-            }
-        });
 
 
 
-
-
-        dateBox.setOnClickListener(new View.OnClickListener() {
+        dateDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Calendar c = Calendar.getInstance();
@@ -179,7 +146,7 @@ public class DetailIntroduction extends Fragment {
 
         });
 
-        timeBox.setOnClickListener(new View.OnClickListener() {
+        timeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
@@ -250,10 +217,6 @@ public class DetailIntroduction extends Fragment {
                 dialog.show();
             }
         });
-
-
-
-
     }
 
 }

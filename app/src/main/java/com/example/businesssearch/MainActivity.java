@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView noResult;
 
+    public static ProgressBar progressBar;
+
 
 
     @Override
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String keyword = keywordSearch.getText().toString();
                 if (keyword.length() >= 1) {
+                    progressBar.setVisibility(View.VISIBLE);
                     String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/autocomplete?text=";
                     url += keyword;
                     Log.d("MyURL", url);
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         autoDetectSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 autoDetectLocation();
             }
         });
@@ -195,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             url += "&&latitude=" + latitude + "&&longitude=" + longitude;
         }
+        Log.d("MYURL", url);
         return url;
     }
 
@@ -212,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleSubmit() {
         if (checkAllField()) {
+            progressBar.setVisibility(View.VISIBLE);
             businessSearch(buildBusinessesSearchUrl());
         }
     }
@@ -221,7 +228,8 @@ public class MainActivity extends AppCompatActivity {
             locationSearch.setEnabled(false);
             locationSearch.setText("");
             locationSearch.setVisibility(View.INVISIBLE);
-            API.autoLocation(requestQueue, autoLocation);
+            progressBar.setVisibility(View.VISIBLE);
+            autoLocation();
         } else {
             locationSearch.setEnabled(true);
             locationSearch.setVisibility(View.VISIBLE);
@@ -244,12 +252,14 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        progressBar.setVisibility(View.GONE);
                         keywordSearch.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, suggestions));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -271,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
         calendarIcon = findViewById(R.id.calendarIcon);
         Bookings.getInstance(this);
         noResult = findViewById(R.id.noResultsSearch);
+        progressBar = findViewById(R.id.progressBarSearch);
     }
 
     public void businessSearch(String url) {
@@ -278,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        businessesInfo = new ArrayList<>();
                         try {
                             JSONArray jsonArray = response.getJSONArray("businesses");
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -288,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
                                 double rating = jsonObject.getDouble("rating");
                                 int distance = (int) Math.round(jsonObject.getDouble("distance") / 1609.34);
                                 BusinessInfo businessInfo = new BusinessInfo(id, name, imageUrl, rating, distance);
-//                                Log.d("BusinessInfo", businessInfo.toString());
                                 businessesInfo.add(businessInfo);
                             }
                         }
@@ -308,11 +320,41 @@ public class MainActivity extends AppCompatActivity {
                             businessesRecyclerView.setVisibility(View.VISIBLE);
                             noResult.setVisibility(View.INVISIBLE);
                         }
+                        progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void autoLocation() {
+        String url = "https://ipinfo.io/json?token=4bd32c12178920";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String[] data = response.getString("loc").split(",");
+                            autoLocation[0] = data[0];
+                            autoLocation[1] = data[1];
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
             }
         });
 

@@ -48,6 +48,7 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
         holder.businessInfoCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MainActivity.progressBar.setVisibility(View.VISIBLE);
                 String url = "https://business-search-web-backend.wl.r.appspot.com/api.yelp.com/v3/businesses/" + businessesInfo.get(holder.getAdapterPosition()).getId();
                 detailInfoSearch(url);
             }
@@ -162,11 +163,13 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                         intent.putExtra("coordinate", coordinates);
                         intent.putExtra("photos", realPhotos);
                         context.startActivity(intent);
+                        MainActivity.progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                MainActivity.progressBar.setVisibility(View.GONE);
             }
         });
 
