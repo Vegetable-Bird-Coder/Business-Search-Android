@@ -3,11 +3,14 @@ package com.example.businesssearch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,8 +30,6 @@ public class DetailInfoActivity extends AppCompatActivity {
 
     private ImageView backIcon, facebookIcon, twitterIcon;
     private TextView nameBar;
-
-
 
 
     @Override
@@ -51,7 +52,7 @@ public class DetailInfoActivity extends AppCompatActivity {
         }
 
         requestQueue =Volley.newRequestQueue(this);
-        context = DetailInfoActivity.context;
+
 
         backIcon = findViewById(R.id.backIcon);
         facebookIcon = findViewById(R.id.facebookIcon);
@@ -106,8 +107,5 @@ public class DetailInfoActivity extends AppCompatActivity {
 
 
 
-
-
     }
-
 }

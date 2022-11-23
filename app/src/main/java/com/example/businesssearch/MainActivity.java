@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private AutoCompleteTextView keywordSearch;
     private EditText distanceSearch, locationSearch;
     private Spinner categorySearch;
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<BusinessInfo> businessesInfo;
     private RecyclerView businessesRecyclerView;
     private BusinessesRecViewAdapter businessesRecViewAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +253,9 @@ public class MainActivity extends AppCompatActivity {
         businessesInfo = new ArrayList<>();
         businessesRecyclerView = findViewById(R.id.businessesInfoResult);
         calendarIcon = findViewById(R.id.calendarIcon);
+
+
+
     }
 
     public void businessSearch(String url) {

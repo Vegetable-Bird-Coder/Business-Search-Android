@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurant Name"
+        android:id="@+id/resNameDialog"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/red_500"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:id="@+id/emailLabelDialog"
+        android:layout_below="@+id/resNameDialog"
+        android:textSize="16sp"
+        android:textColor="@color/red_500"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/emailDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email Id"
+        android:minHeight="48dp"
+        android:layout_below="@+id/emailLabelDialog"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/emailDialog"
+        android:id="@+id/dateBox">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:id="@+id/dateLabelDialog"
+            android:textSize="16sp"
+            android:textColor="@color/red_500"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/dateDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="mm-dd-yyyy"
+            android:minHeight="48dp"
+            android:layout_below="@+id/dateLabelDialog"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dateBox"
+        android:id="@+id/timeBox">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Time"
+            android:id="@+id/timeLabelDialog"
+
+            android:textSize="16sp"
+            android:textColor="@color/red_500"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/timeDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="hh:mm"
+            android:minHeight="48dp"
+            android:layout_below="@+id/timeLabelDialog"/>
+    </RelativeLayout>
+
+
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CANCEL"
+        android:id="@+id/cancelDialog"
+        android:layout_below="@+id/timeBox"
+        android:layout_toStartOf="@+id/submitDialog"
+        android:layout_marginEnd="16dp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:id="@+id/submitDialog"
+        android:layout_below="@+id/timeBox"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"/>
+
+</RelativeLayout>

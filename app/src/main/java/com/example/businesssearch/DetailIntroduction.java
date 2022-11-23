@@ -1,20 +1,32 @@
 package com.example.businesssearch;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.smarteist.autoimageslider.SliderView;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class DetailIntroduction extends Fragment {
@@ -23,6 +35,17 @@ public class DetailIntroduction extends Fragment {
     private TextView addressIntro, priceIntro, phoneIntro, statusIntro, categoryIntro, yelpIntro;
     private SliderView sliderView;
     private SliderAdapter sliderAdapter;
+
+    private Button bookingBtn;
+
+    private TextView nameDialog;
+    private EditText emailDialog, dateDialog, timeDialog;
+    private Button cancelDialog, submitDialog;
+    private AlertDialog dialog;
+    private RelativeLayout dateBox, timeBox;
+
+    private int mYear, mMonth, mDay, mHour, mMinute;
+
 
 
     public DetailIntroduction() {
@@ -70,5 +93,144 @@ public class DetailIntroduction extends Fragment {
         sliderView.setScrollTimeInSec(3);
         sliderView.setAutoCycle(true);
         sliderView.startAutoCycle();
+
+        bookingBtn = view.findViewById(R.id.btnBooking);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View dialogView = getLayoutInflater().inflate(R.layout.booking_dialog, null);
+        builder.setView(dialogView);
+        dialog = builder.create();
+
+
+        nameDialog = dialogView.findViewById(R.id.resNameDialog);
+        emailDialog = dialogView.findViewById(R.id.emailDialog);
+        dateDialog = dialogView.findViewById(R.id.dateDialog);
+        timeDialog = dialogView.findViewById(R.id.timeDialog);
+        cancelDialog = dialogView.findViewById(R.id.cancelDialog);
+        submitDialog = dialogView.findViewById(R.id.submitDialog);
+        dateBox = dialogView.findViewById(R.id.dateBox);
+        timeBox = dialogView.findViewById(R.id.timeBox);
+
+        nameDialog.setText(DetailInfoActivity.name);
+
+        dateBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on below line we are getting
+                // the instance of our calendar.
+                final Calendar c = Calendar.getInstance();
+
+                // on below line we are getting
+                // our day, month and year.
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // on below line we are creating a variable for date picker dialog.
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our text view.
+                                String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                dateDialog.setText(date);
+
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        year, month, day);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
+            }
+        });
+
+
+
+
+
+        dateBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("MYDATE", "Clicked");
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                                dateDialog.setText(date);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        timeBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on below line we are getting the
+                // instance of our calendar.
+                final Calendar c = Calendar.getInstance();
+
+                // on below line we are getting our hour, minute.
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                // on below line we are initializing our Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                // on below line we are setting selected time
+                                // in our text view.
+                                String time = hourOfDay + ":" + minute;
+                                timeDialog.setText(time);
+                            }
+                        }, hour, minute, false);
+                // at last we are calling show to
+                // display our time picker dialog.
+                timePickerDialog.show();
+            }
+        });
+
+        cancelDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        submitDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        bookingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+            }
+        });
+
+
+
+
     }
+
 }
