@@ -18,7 +18,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.smarteist.autoimageslider.SliderView;
 
 public class DetailInfoActivity extends AppCompatActivity {
     public static String id, name, location, price, phone, category, yelpUrl;
@@ -49,6 +48,12 @@ public class DetailInfoActivity extends AppCompatActivity {
             status = intent.getBooleanExtra("status", true);
             coordinates = intent.getStringArrayExtra("coordinate");
             photos = intent.getStringArrayExtra("photos");
+            if (photos != null && photos.length > 0) {
+                for (String s : photos) {
+                    System.out.println("Photo " + s);
+                }
+            }
+
         }
 
         requestQueue =Volley.newRequestQueue(this);

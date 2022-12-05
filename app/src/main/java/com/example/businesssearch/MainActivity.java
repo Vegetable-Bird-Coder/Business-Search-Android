@@ -209,6 +209,10 @@ public class MainActivity extends AppCompatActivity {
             keywordSearch.setError("This field is required");
             return false;
         }
+        if (distanceSearch.getText().toString().equals("")) {
+            distanceSearch.setError("This field is required");
+            return false;
+        }
         if (locationSearch.getText().toString().equals("") && !autoDetectSearch.isChecked()) {
             locationSearch.setError("This field is required");
             return false;
@@ -247,7 +251,8 @@ public class MainActivity extends AppCompatActivity {
                             String[] aux = data.split(",");
                             suggestions = new String[aux.length];
                             for (int i = 0; i < aux.length; i++) {
-                                suggestions[i] = aux[i].substring(1, aux[i].length() - 1);
+                                if (!aux[i].equals(""))
+                                    suggestions[i] = aux[i].substring(1, aux[i].length() - 1);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

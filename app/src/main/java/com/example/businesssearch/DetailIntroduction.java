@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +35,9 @@ public class DetailIntroduction extends Fragment {
 
     public static final String TITLE = "BUSINESS DETAILS";
     private TextView addressIntro, priceIntro, phoneIntro, statusIntro, categoryIntro, yelpIntro;
-    private SliderView sliderView;
-    private SliderAdapter sliderAdapter;
+
+    private RecyclerView recyclerView;
+    private ImgsRecViewAdapter imgsRecViewAdapter;
 
     private Button bookingBtn;
 
@@ -69,9 +71,9 @@ public class DetailIntroduction extends Fragment {
         phoneIntro = view.findViewById(R.id.phoneIntro);
         statusIntro = view.findViewById(R.id.statusIntro);
         categoryIntro = view.findViewById(R.id.categoryIntro);
-        addressIntro.setText(DetailInfoActivity.location);
-        priceIntro.setText(DetailInfoActivity.price);
-        phoneIntro.setText(DetailInfoActivity.phone);
+        addressIntro.setText(DetailInfoActivity.location.equals("") ? "N/A" : DetailInfoActivity.location);
+        priceIntro.setText(DetailInfoActivity.price.equals("") ? "N/A" : DetailInfoActivity.price);
+        phoneIntro.setText(DetailInfoActivity.phone.equals("") ? "N/A" : DetailInfoActivity.phone);
         yelpIntro = view.findViewById(R.id.yelpIntro);
         String dynamicUrl = DetailInfoActivity.yelpUrl;
         String linkedText = String.format("<a href=\"%s\">Business Link</a> ", dynamicUrl);
@@ -88,17 +90,20 @@ public class DetailIntroduction extends Fragment {
         categoryIntro.setText(DetailInfoActivity.category);
 //        yelpIntro.setText(DetailInfoActivity.yelpUrl);
 
-        ArrayList<String> photoSource = new ArrayList<>();
-        photoSource.addAll(Arrays.asList(DetailInfoActivity.photos));
+        recyclerView = view.findViewById(R.id.introImgRecView);
+        if (DetailInfoActivity.photos != null) {
+            recyclerView.setVisibility(View.VISIBLE);
+            ArrayList<String> photoSource = new ArrayList<>();
+            photoSource.addAll(Arrays.asList(DetailInfoActivity.photos));
 
-        sliderView = view.findViewById(R.id.detailPhotosSlider);
-        sliderAdapter = new SliderAdapter(DetailInfoActivity.context);
-        sliderView.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
-        sliderView.setSliderAdapter(sliderAdapter);
-        sliderAdapter.setPhotos(photoSource);
-        sliderView.setScrollTimeInSec(3);
-        sliderView.setAutoCycle(true);
-        sliderView.startAutoCycle();
+            imgsRecViewAdapter = new ImgsRecViewAdapter(DetailInfoActivity.context);
+            recyclerView.setAdapter(imgsRecViewAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(DetailInfoActivity.context, LinearLayoutManager.HORIZONTAL, false));
+            imgsRecViewAdapter.setPhotos(photoSource);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+        }
+
 
         bookingBtn = view.findViewById(R.id.btnBooking);
 
