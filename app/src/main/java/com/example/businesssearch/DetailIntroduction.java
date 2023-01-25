@@ -80,7 +80,7 @@ public class DetailIntroduction extends Fragment {
         yelpIntro.setText(Html.fromHtml(linkedText));
         yelpIntro.setMovementMethod(LinkMovementMethod.getInstance());
 
-        if (DetailInfoActivity.status) {
+        if (!DetailInfoActivity.status) {
             statusIntro.setTextColor(getResources().getColor(R.color.green_500));
             statusIntro.setText("Open Now");
         } else {
@@ -199,9 +199,10 @@ public class DetailIntroduction extends Fragment {
                 } else if (date.length() == 0) {
                     Toast.makeText(getContext(), "Invalid Appointment Date", Toast.LENGTH_SHORT).show();
                 } else if (time.length() == 0 || hour < 10 || hour > 17 || (hour == 17 && minutes > 0)) {
-                    Toast.makeText(getContext(), "Time should be between 10Am and 5PM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Time should be between 10AM and 5PM", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Reservation Booked", Toast.LENGTH_SHORT).show();
+                    String txt = DetailInfoActivity.name + " Reservation Booked";
+                    Toast.makeText(getContext(), txt, Toast.LENGTH_SHORT).show();
                     BookingInfo bookingInfo = new BookingInfo(DetailInfoActivity.id, DetailInfoActivity.name, date, time, email);
                     Bookings.getInstance(getContext()).addBooking(bookingInfo);
                     for (BookingInfo b : Bookings.getInstance(getContext()).getAllBookings()) {

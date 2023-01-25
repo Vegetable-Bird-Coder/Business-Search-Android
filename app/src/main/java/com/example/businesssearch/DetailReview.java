@@ -81,7 +81,10 @@ public class DetailReview extends Fragment {
                         reviewsRecyclerView.setAdapter(reviewsRecViewAdapter);
                         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(DetailInfoActivity.context));
                         reviewsRecViewAdapter.setReviews(reviews);
-                        reviewsRecyclerView.addItemDecoration(new DividerItemDecoration(reviewsRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(reviewsRecyclerView.getContext(),
+                                DividerItemDecoration.VERTICAL);
+                        dividerItemDecoration.setDrawable(reviewsRecyclerView.getContext().getResources().getDrawable(R.drawable.divider));
+                        reviewsRecyclerView.addItemDecoration(dividerItemDecoration);
                         progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {

@@ -1,6 +1,7 @@
 package com.example.businesssearch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -314,8 +315,19 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         businessesRecViewAdapter = new BusinessesRecViewAdapter(MainActivity.this, requestQueue);
+
                         businessesRecyclerView.setAdapter(businessesRecViewAdapter);
+
                         businessesRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(businessesRecyclerView.getContext(),
+                                new LinearLayoutManager(MainActivity.this).getOrientation());
+                        dividerItemDecoration.setDrawable(businessesRecyclerView.getContext().getResources().getDrawable(R.drawable.divider));
+                        businessesRecyclerView.addItemDecoration(dividerItemDecoration);
+
+
+
                         businessesRecViewAdapter.setBusinessesInfo(businessesInfo);
 
                         if (businessesInfo.size() == 0) {

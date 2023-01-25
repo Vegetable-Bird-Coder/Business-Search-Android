@@ -37,6 +37,7 @@ public class DetailMap extends Fragment{
     }
 
 
+    // code from stack overflow
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

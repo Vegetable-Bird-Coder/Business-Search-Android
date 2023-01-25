@@ -151,6 +151,7 @@ public class BusinessesRecViewAdapter extends RecyclerView.Adapter<BusinessesRec
                         catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        System.out.println("My boolean: " + status);
                         Intent intent = new Intent(context, DetailInfoActivity.class);
                         intent.putExtra("id", id);
                         intent.putExtra("name", name);

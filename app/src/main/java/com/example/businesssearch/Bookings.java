@@ -45,6 +45,12 @@ public class Bookings {
     public boolean addBooking(BookingInfo bookingInfo) {
         ArrayList<BookingInfo> bookingsInfo = getAllBookings();
         if (bookingsInfo != null) {
+            for (BookingInfo bookingInfo1 : bookingsInfo) {
+                if (bookingInfo1.getId().equals(bookingInfo.getId())) {
+                    bookingsInfo.remove(bookingInfo1);
+                    break;
+                }
+            }
             if (bookingsInfo.add(bookingInfo)) {
                 Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
